@@ -1,0 +1,34 @@
+{
+    "iphone4": {
+        "currentCheckout": {
+            "borrowedBy": "vlad",
+            "outAt": "2017-08-14T16:42:14.658Z"
+        },
+        "lastCheckout": {
+            "borrowedBy": "",
+            "outAt": "",
+            "inAt": ""
+        }
+    },
+    "iphone5": {
+        "lastCheckout": {
+            "borrowedBy": "",
+            "outAt": "",
+            "inAt": ""
+        }
+    },
+    "iphone6": {
+        "lastCheckout": {
+            "borrowedBy": "",
+            "outAt": "",
+            "inAt": ""
+        }
+    },
+    "iphone7": {
+        "lastCheckout": {
+            "borrowedBy": "",
+            "outAt": "",
+            "inAt": ""
+        }
+    }
+}
