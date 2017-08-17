@@ -39,7 +39,9 @@ module.exports = function (server) {
             } else {
                 let device = deviceList[payload.actions[0].value],
                     action = payload.actions[0].name,
-                    resp = {}
+                    resp = {
+                        mrkdwn: true
+                    }
 
                 switch (action) {
                     case 'check_out':
@@ -47,10 +49,10 @@ module.exports = function (server) {
                         device.currentCheckout = {
                             userId: payload.user.id,
                             username: payload.user.name,
-                            outAt: new Date()
+                            outAt: new Date().getTime()
                         }
                         // set reply
-                        resp.text = `Device ${device.title} booked.\nTake care of it! :smile:`
+                        resp.text = `Device \`${device.name}\` has been booked.\nGo get it from the locker and *Take care of it!* :smile:`
                         resp.delete_original = true
                         break
 
@@ -60,19 +62,20 @@ module.exports = function (server) {
                             userId: payload.user.id,
                             username: payload.user.name,
                             outAt: device.currentCheckout.outAt,
-                            inAt: new Date()
+                            inAt: new Date().getTime()
                         }
                         // delete current user record
                         delete device.currentCheckout
                         // set reply
-                        resp.text = `Device ${device.title} is checked back in. Cheers!`
+                        resp.text = `Device \`${device.name}\` has been checked back in.\n*Please return the device to the locker.* Cheers!`
                         resp.delete_original = true
                         break
 
                     default:
                         let checkout = device.currentCheckout || device.lastCheckout,
-                            date = new Date(checkout.outAt)
-                        resp.text = `${device.name} was last checked out by ${checkout.username} on ${date}`
+                            date = new Date(checkout.outAt).toUTCString()
+
+                        resp.text = `\`${device.name}\` was last checked out by *${checkout.username}* on *${date}*`
                         // the following flag will tell Slack to not replace the printed list of devices with this message; the message will be
                         // displayed underneath the list
                         resp.replace_original = false
@@ -83,35 +86,19 @@ module.exports = function (server) {
             }
         }
     })
-
-    // Route set up for testing purposes
-    server.route({
-        method: 'POST',
-        path: '/test',
-        handler: (request, reply) => {
-            reply({
-                text: 'It\'s 80 degrees right now.',
-                attachments: [
-                    {
-                        text: 'Partly cloudy today and tomorrow'
-                    }
-                ]
-            })
-        }
-    })
 }
-
-
 
 // private functions
 function createDeviceActionList(payload) {
     let availableCount = 0,
         inUseCount = 0,
         response = {
-            text: 'Below you can book or return any devices. Click on "Show Last Booking" to see who is the last person that booked the device.',
+            mrkdwn: true,
+            text: '*Below you can book or return any devices. Click on "Show Last Booking" to see who is the last person that booked the device.*',
             attachments: [
                 {
                     color: '#000000',
+                    mrkdwn_in: ["fields"],
                     fields: [
                         {
                             title: 'Available',
@@ -129,13 +116,12 @@ function createDeviceActionList(payload) {
     for (let a in deviceList) {
         let device = deviceList[a],
             attachment = {
-                title: device.name,
-                text: `${device.type}, ${device.os}`,
-                footer: device.footer,
-                thumb_url: device.thumbUrl,
                 callback_id: `device_${a}`,
                 attachment_type: 'default',
-                "mrkdwn_in": ["pretext", "text", "fields"],
+                mrkdwn_in: ["text"],
+                title: device.name,
+                text: `*${device.type}, ${device.os}*\n${device.description}`,
+                thumb_url: device.thumbUrl,
                 actions: []
             }
         // following condition will trigger if the device is checked out
@@ -153,7 +139,8 @@ function createDeviceActionList(payload) {
                     value: a
                 }]
             } else {
-                attachment.text += `\nThe device was booked by *${device.currentCheckout.username}* on *${device.currentCheckout.outAt}*.`
+                let date = new Date(device.currentCheckout.outAt).toUTCString()
+                attachment.text += `\nThe device was booked by *${device.currentCheckout.username}* on *${date}*.`
             }
         }
         // otherwise the device is available
