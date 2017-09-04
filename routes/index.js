@@ -14,7 +14,6 @@ router.get('/', (req, res, next) => {
 
 // devices route
 router.post('/devices', (req, res, next) => {
-  console.log('devices')
   if (!req.body || req.body.token !== config.verificationToken) {
     res.status(400).send({ test: 'Service temporarily unavailable' })
   } else {
