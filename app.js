@@ -9,9 +9,8 @@ const path = require('path'),
 
 
 // get config, routes and set port
-const config = require('./config.json'),
-  index = require('./routes/index'),
-  port = normalizePort(process.env.PORT || config.port)
+const index = require('./routes/index'),
+  port = normalizePort(process.env.PORT || 5998)
 
 // set up express app
 const app = express()
