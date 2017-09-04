@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js & ngrok http 6000 --log stderr & disown"
   },
   "dependencies": {
     "body-parser": "~1.17.1",

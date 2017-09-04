@@ -1,13 +1,17 @@
 'use strict'
 
-const debug = require('debug')('device-management-app:server'),
+// import third-party modules
+const path = require('path'),
   http = require('http'),
   express = require('express'),
-  path = require('path'),
-  bodyParser = require('body-parser'),
-  index = require('./routes/index'),
-  port = normalizePort(process.env.PORT || '3000')
+  debug = require('debug')('device-management-app:server'),
+  bodyParser = require('body-parser')
 
+
+// get config, routes and set port
+const config = require('./config.json'),
+  index = require('./routes/index'),
+  port = normalizePort(process.env.PORT || config.port)
 
 // set up express app
 const app = express()
