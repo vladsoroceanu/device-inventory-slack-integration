@@ -14,6 +14,7 @@ router.get('/', (req, res, next) => {
 
 // devices route
 router.post('/devices', (req, res, next) => {
+  console.log('devices')
   if (!req.body || req.body.token !== config.verificationToken) {
     res.status(400).send({ test: 'Service temporarily unavailable' })
   } else {
@@ -51,7 +52,7 @@ router.post('/buttons', (req, res, next) => {
           outAt: new Date().getTime()
         }
         // set reply
-        resp.text = `Device \`${device.name}\` has been booked.\nGo get it from the locker and *Take care of it!* :smile:`
+        resp.text = `Device \`${device.name}\` has been booked.\nGo get it from the locker and *Take care of it!* :smile:\nTo get the device please contact \`Sujata Singh\`, \`Tarunkumar Gondalia\` and \`Ravi Dindu\` to collect the devices`
         resp.delete_original = true
         break
 
@@ -94,7 +95,7 @@ function createDeviceActionList(payload) {
     inUseCount = 0,
     response = {
       mrkdwn: true,
-      text: '*Below you can book or return any devices. Click on "Show Last Booking" to see who is the last person that booked the device.*',
+      text: 'Below you can book or return any devices. Click on "Show Last Booking" to see who is the last person that booked the device.\n*After booking your device please contact `Sujata Singh`, `Tarunkumar Gondalia` or `Ravi Dindu` to collect the device.*',
       attachments: [
         {
           color: '#000000',
@@ -154,12 +155,15 @@ function createDeviceActionList(payload) {
         type: "button",
         style: 'primary',
         value: a
-      }, {
-        name: 'history',
-        text: 'Show Last Booking',
-        type: 'button',
-        value: a
       }]
+      if (device.lastCheckout) {
+        attachment.actions.push({
+          name: 'history',
+          text: 'Show Last Booking',
+          type: 'button',
+          value: a
+        })
+      }
     }
     response.attachments.push(attachment)
   }
