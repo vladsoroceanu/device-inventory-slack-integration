@@ -94,7 +94,7 @@ function createDeviceActionList(payload) {
     inUseCount = 0,
     response = {
       mrkdwn: true,
-      text: 'Below you can book or return any devices. Click on "Show Last Booking" to see who is the last person that booked the device.\n*After booking your device please contact `Sujata Singh`, `Tarunkumar Gondalia` or `Ravi Dindu` to collect the device.*',
+      text: 'Below you can book or return any devices. Click on "Show Last Booking" to see who is the last person that booked the device.\n*After booking it please contact `Sujata Singh`, `Tarunkumar Gondalia` or `Ravi Dindu` to collect the device.*',
       attachments: [
         {
           color: '#000000',
