@@ -1,4 +1,4 @@
-### Slack Integration for test device Check-out/in process
+### Slack integration for test device check-out/check-in process
 
 #DEPLOY
 
