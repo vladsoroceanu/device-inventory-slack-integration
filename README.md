@@ -2,7 +2,7 @@
 
 #DEPLOY
 
-- Create a ./config.json file where you set the clientId and verificationToken of the Slack App.
+- Create a ./config.json file where you set the verificationToken of the Slack App.
 ```bash
     $ npm start
 ```
